@@ -8,7 +8,7 @@
 #include "display.h"
 /*------ Variaveis Globais -------*/
 //Variaveis de controle do display: dados | seleção | Chip select
-uint16_t D4=0, D5=1, D6=2, D7=3, E=4, RS=5;
+//uint16_t D4=0, D5=1, D6=2, D7=3, E=4, RS=5;
 
 //Endereços da CGRAM 0, 1, 2, 3, 4, 6, 7
 char cg0 = 0x40;
@@ -75,9 +75,9 @@ char ot[8]={0b00001110,
  * Função de tempo necessaria para o funcionamento do lcd.
  */
 void tempo(void){
-	HAL_GPIO_WritePin(GPIOC, E, GPIO_PIN_SET);//E
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);//E
 	HAL_Delay(15);
-	HAL_GPIO_WritePin(GPIOC, E, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 }
 /**
  * @brief Inicializa o display.
@@ -117,25 +117,25 @@ void instrucoes(char hexa){
 	//converte para binario
 	conversorB(hexa, &conv_b);
 
-	HAL_GPIO_WritePin(GPIOC, E, GPIO_PIN_RESET); //Desabilita o chip select
-	HAL_GPIO_WritePin(GPIOC, RS, GPIO_PIN_RESET); //Habilita a seleção de instrução
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET); //Desabilita o chip select
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET); //Habilita a seleção de instrução
 
 
 	// Manda para o barramento de dados os 4 primeiros bit.
-	HAL_GPIO_WritePin(GPIOC, D7, conv_b[0]);
-	HAL_GPIO_WritePin(GPIOC, D6, conv_b[1]);
-	HAL_GPIO_WritePin(GPIOC, D5, conv_b[2]);
-	HAL_GPIO_WritePin(GPIOC, D4, conv_b[3]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, conv_b[0]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, conv_b[1]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, conv_b[2]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, conv_b[3]);
 	tempo();
 
 	// Manda para o barramento de dados os 4 ultimos bit.
-	HAL_GPIO_WritePin(GPIOC, D7, conv_b[4]);
-	HAL_GPIO_WritePin(GPIOC, D6, conv_b[5]);
-	HAL_GPIO_WritePin(GPIOC, D5, conv_b[6]);
-	HAL_GPIO_WritePin(GPIOC, D4, conv_b[7]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, conv_b[4]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, conv_b[5]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, conv_b[6]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, conv_b[7]);
 	tempo();
 
-	HAL_GPIO_WritePin(GPIOC, RS, GPIO_PIN_SET);//Habilita a seleção de dados
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);//Habilita a seleção de dados
 }
 
 /**
@@ -197,20 +197,20 @@ void escreve_char(char *texto){
 	conversorB(inte, *bin);
 
 
-	HAL_GPIO_WritePin(GPIOC, RS, GPIO_PIN_SET); //Habilita a seleção de DADOS
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET); //Habilita a seleção de DADOS
 
 		// Manda para o barramento de dados os 4 primeiros bit.
-	HAL_GPIO_WritePin(GPIOC, D7, bin[0]);
-	HAL_GPIO_WritePin(GPIOC, D6, bin[1]);
-	HAL_GPIO_WritePin(GPIOC, D5, bin[2]);
-	HAL_GPIO_WritePin(GPIOC, D4, bin[3]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, bin[0]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, bin[1]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, bin[2]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, bin[3]);
 	tempo();
 
 			// Manda para o barramento de dados os 4 ultimos bit.
-	HAL_GPIO_WritePin(GPIOC, D7, bin[4]);
-	HAL_GPIO_WritePin(GPIOC, D6, bin[5]);
-	HAL_GPIO_WritePin(GPIOC, D5, bin[6]);
-	HAL_GPIO_WritePin(GPIOC, D4, bin[7]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, bin[4]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, bin[5]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, bin[6]);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, bin[7]);
 	tempo();
 
 
@@ -247,6 +247,8 @@ void escreve_string(char posicao, char *texto){
 		i++;
 	}
 }
+
+
 
 
 
