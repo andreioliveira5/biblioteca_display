@@ -8,7 +8,7 @@
 #include "display.h"
 /*------ Variaveis Globais -------*/
 //Variaveis de controle do display: dados | seleção | Chip select
-//uint16_t D4=0, D5=1, D6=2, D7=3, E=4, RS=5;
+//uint16_t D4=1, D5=2, D6=3, D7=4, E=5, RS=6;
 
 //Endereços da CGRAM 0, 1, 2, 3, 4, 6, 7
 char cg0 = 0x40;
@@ -76,7 +76,7 @@ char ot[8]={0b00001110,
  */
 void tempo(void){
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);//E
-	HAL_Delay(15);
+	HAL_Delay(100);
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 }
 /**
@@ -227,28 +227,48 @@ void escreve_char(char texto){
  */
 void escreve_string(char posicao, char *texto){
 	uint16_t i=0;
-
+	uint8_t tes = 0;
 	instrucoes(posicao);
-	while((i < 17) & (texto[i] != '\0')){
-		if(texto[i+1] == 'ç'){
-			texto[i+1]=0;
+
+	while(i < 17 & texto[i] != '\0'){
+
+		if(texto[i] == 195){
+			if(texto[i+1] == 167){
+				texto[i+1]=0;
+			}
+			if(texto[i+1] == 161){
+				texto[i+1]=1;
+			}
+			if(texto[i+1] == 169){
+				texto[i+1]=2;
+			}
+			if(texto[i+1] == 163){
+				texto[i+1]=3;
+			}
+			if(texto[i+1] == 181){
+				texto[i+1]=4;
+			}
 		}
-		if(texto[i+1] == 'á'){
-			texto[i+1]=1;
-		}
-		if(texto[i+1] == 'é'){
-			texto[i+1]=2;
-		}
-		if(texto[i+1] == 'ã'){
-			texto[i+1]=3;
-		}
-		if(texto[i+1] == 'õ'){
-			texto[i+1]=4;
-		}
+		tes = texto[i+1];
 		escreve_char(texto[i]);
 		i++;
 	}
 }
+
+void variaveis (char posicao, int32_t valor){
+	uint16_t i=0;
+	char texto[17];
+
+	itoa(valor, texto, 10);
+
+	instrucoes(posicao);
+
+	while (i<17 & texto[i] != '\0'){
+		escreve_char(texto[i]);
+		i++;
+	}
+}
+
 
 
 
