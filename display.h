@@ -50,7 +50,7 @@ void escreve_string(char posicao, char *texto);
  * Adiciona as variaveis padão escolhidas
  *  (usar portas C previamente escolhidas)
  */
-void variaveis(void);
+void variaveis(char posicao, int32_t valor);
 /*
  * Limpar display
  */
@@ -64,3 +64,4 @@ void escreve_numero(char posicao, int32_t valor);
 void escreve_char(char texto);
 
 #endif /* INC_DISPLAY_H_ */
+
