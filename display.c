@@ -109,6 +109,7 @@ void inicializa (void){
  *
  * @param[in] hexa: char com o valor em hexadecimal da instução a ser executada.
  */
+
 void instrucoes(char hexa){
 
 	int8_t conv_b[8];
@@ -146,8 +147,9 @@ void instrucoes(char hexa){
  *@param[in] inte: unsigned int de 16 bits, contendo o valor a ser convertido.
  *@param[in] *convB: ponteiro para um unsigned int de 8 bits, que será armazenado o valor convertido.
  */
-void conversorB(uint16_t inte, uint8_t *convB){
-	for (uint16_t i=7; i>= 0 ; i --){
+void conversorB(int16_t inte, int8_t *convB){
+	int16_t teste= inte;
+	for (int16_t i=7; i>= 0 ; i --){
 		if((inte % 2)==0 )convB[i]=0;
 		else convB[i]=1;
 		inte=inte/2;
@@ -169,7 +171,7 @@ void caracteres_especiais(char posicao, char *caracter){
 
 
 	for(int8_t i=0; i < 8 ;i++){
-		escreve_char(&caracter[i]);
+		escreve_char(caracter[i]);
 	}
 }
 
@@ -188,13 +190,13 @@ void limpar(void){
  *
  *	@param[in] texto: char contendo o texto que devera ser escrito no display.
  */
-void escreve_char(char *texto){
+void escreve_char(char texto){
 
 
 	int8_t bin[8];
 	int16_t inte;
 	inte = texto;
-	conversorB(inte, *bin);
+	conversorB(inte, &bin);
 
 
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET); //Habilita a seleção de DADOS
@@ -227,28 +229,26 @@ void escreve_string(char posicao, char *texto){
 	uint16_t i=0;
 
 	instrucoes(posicao);
-	while(i < 17 & texto[i] != '\0'){
-		if(texto[i] == 'ç'){
-			texto[i]=0;
+	while((i < 17) & (texto[i] != '\0')){
+		if(texto[i+1] == 'ç'){
+			texto[i+1]=0;
 		}
-		if(texto[i] == 'á'){
-			texto[i]=1;
+		if(texto[i+1] == 'á'){
+			texto[i+1]=1;
 		}
-		if(texto[i] == 'é'){
-			texto[i]=2;
+		if(texto[i+1] == 'é'){
+			texto[i+1]=2;
 		}
-		if(texto[i] == 'ã'){
-			texto[i]=3;
+		if(texto[i+1] == 'ã'){
+			texto[i+1]=3;
 		}
-		if(texto[i] == 'õ'){
-			texto[i]=4;
+		if(texto[i+1] == 'õ'){
+			texto[i+1]=4;
 		}
 		escreve_char(texto[i]);
 		i++;
 	}
 }
-
-
 
 
 
